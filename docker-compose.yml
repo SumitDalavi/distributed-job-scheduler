@@ -1,24 +1,47 @@
 version: '3.8'
-services:
-  scheduler1:
-    build: .
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgres://user:pass@db:5432/db?sslmode=disable
-  
-  scheduler2:
-    build: .
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgres://user:pass@db:5432/db?sslmode=disable
 
-  db:
-    image: postgres:15-alpine
+services:
+  postgres:
+    image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=db
+      POSTGRES_DB: scheduler
+      POSTGRES_USER: scheduler
+      POSTGRES_PASSWORD: scheduler
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scheduler"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  scheduler-node1:
+    build: .
+    environment:
+      DATABASE_URL: postgres://scheduler:scheduler@postgres:5432/scheduler?sslmode=disable
+      NODE_ID: node-1
+      PORT: "8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  scheduler-node2:
+    build: .
+    environment:
+      DATABASE_URL: postgres://scheduler:scheduler@postgres:5432/scheduler?sslmode=disable
+      NODE_ID: node-2
+      PORT: "8080"
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:
