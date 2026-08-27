@@ -16,16 +16,22 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func main() {
-	cfg := config.Load()
+var quit = make(chan os.Signal, 1)
 
-	// ── Database ──────────────────────────────────────────────────────────────
+func run() int {
+	cfg := config.Load()
 	database, err := db.New(cfg.DatabaseURL)
 	if err != nil {
-		log.Fatalf("cannot connect to database: %v", err)
+		log.Printf("cannot connect to database: %v", err)
+		return 1
 	}
+	return runWithDB(database, cfg)
+}
+
+func runWithDB(database *db.DB, cfg *config.Config) int {
 	if err := database.Migrate(); err != nil {
-		log.Fatalf("migration failed: %v", err)
+		log.Printf("migration failed: %v", err)
+		return 1
 	}
 
 	// ── Leader election ───────────────────────────────────────────────────────
@@ -53,12 +59,12 @@ func main() {
 	log.Printf("[main] node %s starting on port %s", cfg.NodeID, cfg.Port)
 
 	// ── Graceful shutdown ─────────────────────────────────────────────────────
-	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("server error: %v", err)
+			log.Printf("server error: %v", err)
+			quit <- syscall.SIGTERM
 		}
 	}()
 
@@ -72,4 +78,9 @@ func main() {
 		log.Printf("[main] server shutdown error: %v", err)
 	}
 	log.Println("[main] stopped")
+	return 0
+}
+
+func main() {
+	os.Exit(run())
 }

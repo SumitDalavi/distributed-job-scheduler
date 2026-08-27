@@ -30,3 +30,7 @@ bin/
 .env
 .env.local
 .env.*.local
+
+coverage.out
+
+coverage.html
