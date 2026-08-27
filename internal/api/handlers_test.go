@@ -347,7 +347,7 @@ func TestGetJobLogsError(t *testing.T) {
 func TestRegisterRoutes(t *testing.T) {
 	h, _, cleanup := setupTestHandler(t)
 	defer cleanup()
-	
+
 	r := mux.NewRouter()
 	h.RegisterRoutes(r)
 	if r.GetRoute("health") == nil {

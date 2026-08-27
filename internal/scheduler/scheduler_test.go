@@ -64,7 +64,7 @@ func TestSyncJobsNotLeader(t *testing.T) {
 	d := &db.DB{DB: mockDB}
 	elector := NewLeaderElector(d, "node1", time.Second)
 	// Not acquiring, so isLeader = false
-	
+
 	sched := New(d, elector, "node1")
 	err = sched.syncJobs(context.Background())
 	if err != nil {
@@ -82,12 +82,12 @@ func TestSyncJobsLeader(t *testing.T) {
 	d := &db.DB{DB: mockDB}
 	elector := NewLeaderElector(d, "node1", time.Second)
 	elector.isLeader = true
-	
+
 	sched := New(d, elector, "node1")
 
 	rows := sqlmock.NewRows([]string{"id", "name", "cron_expr", "payload", "enabled", "created_at", "updated_at", "last_run_at", "next_run_at"}).
 		AddRow("uuid-1", "test-job", "* * * * * *", "{}", true, time.Now(), time.Now(), time.Now(), time.Now())
-	
+
 	mock.ExpectQuery("SELECT id, name, cron_expr").WillReturnRows(rows)
 
 	err = sched.syncJobs(context.Background())
@@ -109,7 +109,7 @@ func TestListJobsError(t *testing.T) {
 	d := &db.DB{DB: mockDB}
 	elector := NewLeaderElector(d, "node1", time.Second)
 	elector.isLeader = true
-	
+
 	sched := New(d, elector, "node1")
 
 	mock.ExpectQuery("SELECT id, name, cron_expr").WillReturnError(fmt.Errorf("db error"))
@@ -186,7 +186,7 @@ func TestStartStop(t *testing.T) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	sched.Start(ctx, 10*time.Millisecond)
-	
+
 	// mock release
 	mock.ExpectExec("DELETE FROM leader_leases").
 		WillReturnResult(sqlmock.NewResult(0, 0))
@@ -310,4 +310,3 @@ func TestLeaderLoopElectionError(t *testing.T) {
 	cancel()
 	time.Sleep(20 * time.Millisecond)
 }
-

@@ -38,7 +38,7 @@ func TestLoadDefaults(t *testing.T) {
 	if cfg.Port != "8080" {
 		t.Errorf("expected default 8080, got %s", cfg.Port)
 	}
-	
+
 	// NODE_ID defaults to hostname, just ensure it's not empty
 	if cfg.NodeID == "" {
 		t.Errorf("expected fallback NodeID")
