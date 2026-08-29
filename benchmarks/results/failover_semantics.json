@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-08-29T16:05:04.289914Z",
+  "environment": {
+    "os": "Windows 10",
+    "python": "3.10.2"
+  },
+  "fixture": "cron (* * * * *) = every minute, observed for 125s",
+  "command": "BENCH_BASE_URL=http://127.0.0.1:8081/api/v1 python benchmarks/benchmark.py",
+  "semantics": {
+    "idempotency_granularity": "per-minute \u2014 time.Truncate(time.Minute)",
+    "dedup_mechanism": "INSERT ... ON CONFLICT (idempotency_key) DO NOTHING"
+  },
+  "metrics": {
+    "observation_window_s": 125,
+    "execution_count": 3,
+    "expected_minimum": 2,
+    "unique_idempotency_keys": 3,
+    "exactly_once_verified": true,
+    "success": true,
+    "correctness": "PASS"
+  }
+}
