@@ -4,6 +4,7 @@ services:
   scheduler-node1:
     build: .
     environment:
+      DATABASE_URL: ${DATABASE_URL:-postgres://scheduler:scheduler@postgres:5432/scheduler?sslmode=disable}
       NODE_ID: node-1
       PORT: "8080"
     ports:
@@ -16,6 +17,7 @@ services:
   scheduler-node2:
     build: .
     environment:
+      DATABASE_URL: ${DATABASE_URL:-postgres://scheduler:scheduler@postgres:5432/scheduler?sslmode=disable}
       NODE_ID: node-2
       PORT: "8080"
     ports:

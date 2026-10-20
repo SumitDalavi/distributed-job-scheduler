@@ -48,7 +48,7 @@ jobs:
           python-version: '3.11'
       - name: Start services
         run: |
-          docker compose up -d postgres scheduler-node2
+          docker compose --profile live up -d postgres scheduler-node2
           sleep 15
       - name: Run benchmark
         run: |
@@ -62,4 +62,4 @@ jobs:
           retention-days: 90
       - name: Teardown
         if: always()
-        run: docker compose down -v
+        run: docker compose --profile live down -v
