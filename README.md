@@ -1,13 +1,12 @@
 # Distributed Job Scheduler ⏱️
 
-[![Release](https://img.shields.io/github/v/release/SumitDalavi/distributed-job-scheduler?color=blue&logo=github)](https://github.com/SumitDalavi/distributed-job-scheduler/releases)
+[![CI Pipeline](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/SumitDalavi/distributed-job-scheduler?color=0969da&label=release&logo=github)](https://github.com/SumitDalavi/distributed-job-scheduler/releases)
 [![Release Workflow](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/release.yml/badge.svg)](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/release.yml)
-[![SBOM](https://img.shields.io/badge/SBOM-SPDX%20JSON-blueviolet?logo=spdx)](https://github.com/SumitDalavi/distributed-job-scheduler/releases)
-
-[![Release](https://img.shields.io/github/v/release/SumitDalavi/distributed-job-scheduler?color=blue&logo=github)](https://github.com/SumitDalavi/distributed-job-scheduler/releases)
-[![SBOM](https://img.shields.io/badge/SBOM-SPDX%20JSON-blueviolet?logo=spdx)](https://github.com/SumitDalavi/distributed-job-scheduler/releases)
-
-![CI](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/ci.yml/badge.svg?branch=master)
+[![GHCR Container](https://img.shields.io/badge/ghcr.io-v0.2.0-blue?logo=docker&logoColor=white)](https://github.com/SumitDalavi/distributed-job-scheduler/pkgs/container/distributed-job-scheduler)
+[![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go&logoColor=white)](https://golang.org)
+[![SBOM](https://img.shields.io/badge/SBOM-SPDX%202.3-blueviolet?logo=spdx)](https://github.com/SumitDalavi/distributed-job-scheduler/releases/tag/v0.2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 > **Maturity:** Full Prototype
 > _Leader-election based distributed cron scheduler using Postgres advisory locks to prevent duplicate job execution._
@@ -74,18 +73,15 @@ Enterprise deployment with production-grade backends, security scans, and contai
 ```bash
 # 1. Clone the repository
 
-![CI](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/ci.yml/badge.svg?branch=master)
 git clone https://github.com/SumitDalavi/distributed-job-scheduler.git
 cd distributed-job-scheduler
 
 # 2. Build and start
 
-![CI](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/ci.yml/badge.svg?branch=master)
 docker-compose up -d --build
 
 # 3. Verify it's running
 
-![CI](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/ci.yml/badge.svg?branch=master)
 curl http://localhost:8080/health
 ```
 
@@ -96,12 +92,10 @@ The API is now available at **http://localhost:8080**
 ```bash
 # Health Check
 
-![CI](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/ci.yml/badge.svg?branch=master)
 curl http://localhost:8080/health
 
 # Simulate Traffic
 
-![CI](https://github.com/SumitDalavi/distributed-job-scheduler/actions/workflows/ci.yml/badge.svg?branch=master)
 curl -X POST http://localhost:8080/api/trigger -H "Content-Type: application/json" -d '{"test":"payload"}'
 ```
 
