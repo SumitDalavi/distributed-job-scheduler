@@ -1,8 +1,34 @@
 version: '3.8'
 
 services:
+  scheduler-node1:
+    build: .
+    environment:
+      NODE_ID: node-1
+      PORT: "8080"
+    ports:
+      - "8085:8080"
+    env_file:
+      - path: .env
+        required: false
+    restart: unless-stopped
+
+  scheduler-node2:
+    build: .
+    environment:
+      NODE_ID: node-2
+      PORT: "8080"
+    ports:
+      - "8081:8080"
+    env_file:
+      - path: .env
+        required: false
+    restart: unless-stopped
+
+  # ── Tier 2 Companion Services (started via: docker compose --profile live up) ──
   postgres:
     image: postgres:16-alpine
+    profiles: ["live"]
     environment:
       POSTGRES_DB: scheduler
       POSTGRES_USER: scheduler
@@ -16,32 +42,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-
-  scheduler-node1:
-    build: .
-    environment:
-      DATABASE_URL: postgres://scheduler:scheduler@postgres:5432/scheduler?sslmode=disable
-      NODE_ID: node-1
-      PORT: "8080"
-    ports:
-      - "8085:8080"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    restart: unless-stopped
-
-  scheduler-node2:
-    build: .
-    environment:
-      DATABASE_URL: postgres://scheduler:scheduler@postgres:5432/scheduler?sslmode=disable
-      NODE_ID: node-2
-      PORT: "8080"
-    ports:
-      - "8081:8080"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    restart: unless-stopped
 
 volumes:
   pgdata:
