@@ -8,8 +8,7 @@
 [![SBOM](https://img.shields.io/badge/SBOM-SPDX%202.3-blueviolet?logo=spdx)](https://github.com/SumitDalavi/distributed-job-scheduler/releases/tag/v0.2.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-> **Maturity:** Full Prototype
-> _Leader-election based distributed cron scheduler using Postgres advisory locks to prevent duplicate job execution._
+> Leader-election based distributed cron scheduler using Postgres advisory locks to prevent duplicate job execution across concurrent worker nodes.
 
 ## The Problem
 Modern distributed systems require robust, highly concurrent solutions. Simple CRUD applications fail when subjected to high throughput, race conditions, or massive data sets.
